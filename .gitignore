@@ -38,6 +38,10 @@ artifacts/
 .nuget/
 packages/
 
+# Fichiers de logs (Serilog)
+[Ll]ogs/
+*.log
+
 # Divers
 .DS_Store
 Thumbs.db
