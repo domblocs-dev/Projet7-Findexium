@@ -53,6 +53,7 @@ builder.Services.AddAuthentication(options =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
+        NameClaimType = "sub",
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
@@ -86,6 +87,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+app.UseMiddleware<Dot.Net.WebApi.Middleware.RequestLoggingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

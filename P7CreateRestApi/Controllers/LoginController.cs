@@ -15,11 +15,16 @@ public class LoginController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<LoginController> _logger;
 
-    public LoginController(UserManager<User> userManager, IConfiguration configuration)
+    public LoginController(
+        UserManager<User> userManager,
+        IConfiguration configuration,
+        ILogger<LoginController> logger)
     {
         _userManager = userManager;
         _configuration = configuration;
+        _logger = logger;
     }
 
     [HttpPost("login")]
@@ -28,6 +33,7 @@ public class LoginController : ControllerBase
         User? user = await _userManager.FindByNameAsync(model.Username);
         if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password))
         {
+            _logger.LogWarning("Echec de connexion pour l'utilisateur {Username}", model.Username);
             return Unauthorized();
         }
 
@@ -57,6 +63,9 @@ public class LoginController : ControllerBase
 
         string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
+        _logger.LogInformation("Connexion reussie pour l'utilisateur {Username}", model.Username);
+
         return Ok(new { token = tokenString, expiration = token.ValidTo });
+
     }
 }

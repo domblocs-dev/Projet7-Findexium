@@ -11,10 +11,12 @@ namespace Dot.Net.WebApi.Controllers;
 public class BidListController : ControllerBase
 {
     private readonly BidListRepository _bidListRepository;
+    private readonly ILogger<BidListController> _logger;
 
-    public BidListController(BidListRepository bidListRepository)
+    public BidListController(BidListRepository bidListRepository, ILogger<BidListController> logger)
     {
         _bidListRepository = bidListRepository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -39,6 +41,7 @@ public class BidListController : ControllerBase
     public async Task<IActionResult> Create([FromBody] BidList bidList)
     {
         BidList created = await _bidListRepository.Add(bidList);
+        _logger.LogInformation("Bid {Id} cree par {User}", created.BidListId, User.Identity?.Name);
         return CreatedAtAction(nameof(GetById), new { id = created.BidListId }, created);
     }
 
@@ -51,6 +54,7 @@ public class BidListController : ControllerBase
         }
         bidList.BidListId = id;
         await _bidListRepository.Update(bidList);
+        _logger.LogInformation("Bid {Id} modifie par {User}", id, User.Identity?.Name);
         return Ok(bidList);
     }
 
@@ -62,6 +66,7 @@ public class BidListController : ControllerBase
         {
             return NotFound();
         }
+        _logger.LogInformation("Bid {Id} supprime par {User}", id, User.Identity?.Name);
         return Ok(deleted);
     }
 }

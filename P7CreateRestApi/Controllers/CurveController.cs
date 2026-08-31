@@ -11,10 +11,12 @@ namespace Dot.Net.WebApi.Controllers;
 public class CurveController : ControllerBase
 {
     private readonly CurvePointRepository _curvePointRepository;
+    private readonly ILogger<CurveController> _logger;
 
-    public CurveController(CurvePointRepository curvePointRepository)
+    public CurveController(CurvePointRepository curvePointRepository, ILogger<CurveController> logger)
     {
         _curvePointRepository = curvePointRepository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -39,6 +41,7 @@ public class CurveController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CurvePoint curvePoint)
     {
         CurvePoint created = await _curvePointRepository.Add(curvePoint);
+        _logger.LogInformation("CurvePoint {Id} cree par {User}", created.Id, User.Identity?.Name);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
@@ -51,6 +54,7 @@ public class CurveController : ControllerBase
         }
         curvePoint.Id = id;
         await _curvePointRepository.Update(curvePoint);
+        _logger.LogInformation("CurvePoint {Id} modifie par {User}", id, User.Identity?.Name);
         return Ok(curvePoint);
     }
 
@@ -62,6 +66,7 @@ public class CurveController : ControllerBase
         {
             return NotFound();
         }
+        _logger.LogInformation("CurvePoint {Id} supprime par {User}", id, User.Identity?.Name);
         return Ok(deleted);
     }
 }

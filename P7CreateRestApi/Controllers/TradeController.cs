@@ -11,10 +11,12 @@ namespace Dot.Net.WebApi.Controllers;
 public class TradeController : ControllerBase
 {
     private readonly TradeRepository _tradeRepository;
+    private readonly ILogger<TradeController> _logger;
 
-    public TradeController(TradeRepository tradeRepository)
+    public TradeController(TradeRepository tradeRepository, ILogger<TradeController> logger)
     {
         _tradeRepository = tradeRepository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -39,6 +41,7 @@ public class TradeController : ControllerBase
     public async Task<IActionResult> Create([FromBody] Trade trade)
     {
         Trade created = await _tradeRepository.Add(trade);
+        _logger.LogInformation("Trade {Id} cree par {User}", created.TradeId, User.Identity?.Name);
         return CreatedAtAction(nameof(GetById), new { id = created.TradeId }, created);
     }
 
@@ -51,6 +54,7 @@ public class TradeController : ControllerBase
         }
         trade.TradeId = id;
         await _tradeRepository.Update(trade);
+        _logger.LogInformation("Trade {Id} modifie par {User}", id, User.Identity?.Name);
         return Ok(trade);
     }
 
@@ -62,6 +66,7 @@ public class TradeController : ControllerBase
         {
             return NotFound();
         }
+        _logger.LogInformation("Trade {Id} supprime par {User}", id, User.Identity?.Name);
         return Ok(deleted);
     }
 }

@@ -11,10 +11,12 @@ namespace Dot.Net.WebApi.Controllers;
 public class RatingController : ControllerBase
 {
     private readonly RatingRepository _ratingRepository;
+    private readonly ILogger<RatingController> _logger;
 
-    public RatingController(RatingRepository ratingRepository)
+    public RatingController(RatingRepository ratingRepository, ILogger<RatingController> logger)
     {
         _ratingRepository = ratingRepository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -39,6 +41,7 @@ public class RatingController : ControllerBase
     public async Task<IActionResult> Create([FromBody] Rating rating)
     {
         Rating created = await _ratingRepository.Add(rating);
+        _logger.LogInformation("Rating {Id} cree par {User}", created.Id, User.Identity?.Name);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
@@ -51,6 +54,7 @@ public class RatingController : ControllerBase
         }
         rating.Id = id;
         await _ratingRepository.Update(rating);
+        _logger.LogInformation("Rating {Id} modifie par {User}", id, User.Identity?.Name);
         return Ok(rating);
     }
 
@@ -62,6 +66,7 @@ public class RatingController : ControllerBase
         {
             return NotFound();
         }
+        _logger.LogInformation("Rating {Id} supprime par {User}", id, User.Identity?.Name);
         return Ok(deleted);
     }
 }
