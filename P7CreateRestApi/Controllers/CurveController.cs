@@ -1,7 +1,7 @@
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dot.Net.WebApi.Controllers;
 
@@ -20,6 +20,7 @@ public class CurveController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<CurvePoint>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
         List<CurvePoint> curvePoints = await _curvePointRepository.FindAll();
@@ -27,6 +28,8 @@ public class CurveController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(CurvePoint), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
         CurvePoint? curvePoint = await _curvePointRepository.FindById(id);
@@ -38,6 +41,8 @@ public class CurveController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(CurvePoint), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CurvePoint curvePoint)
     {
         CurvePoint created = await _curvePointRepository.Add(curvePoint);
@@ -46,6 +51,9 @@ public class CurveController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(CurvePoint), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] CurvePoint curvePoint)
     {
         if (!await _curvePointRepository.Exists(id))
@@ -59,6 +67,8 @@ public class CurveController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(CurvePoint), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         CurvePoint? deleted = await _curvePointRepository.Delete(id);

@@ -1,7 +1,7 @@
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dot.Net.WebApi.Controllers;
 
@@ -20,6 +20,7 @@ public class TradeController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<Trade>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
         List<Trade> trades = await _tradeRepository.FindAll();
@@ -27,6 +28,8 @@ public class TradeController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(Trade), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
         Trade? trade = await _tradeRepository.FindById(id);
@@ -38,6 +41,8 @@ public class TradeController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(Trade), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] Trade trade)
     {
         Trade created = await _tradeRepository.Add(trade);
@@ -46,6 +51,9 @@ public class TradeController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(Trade), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] Trade trade)
     {
         if (!await _tradeRepository.Exists(id))
@@ -59,6 +67,8 @@ public class TradeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(Trade), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         Trade? deleted = await _tradeRepository.Delete(id);

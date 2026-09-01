@@ -1,7 +1,7 @@
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dot.Net.WebApi.Controllers;
 
@@ -20,6 +20,7 @@ public class RatingController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<Rating>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
         List<Rating> ratings = await _ratingRepository.FindAll();
@@ -27,6 +28,8 @@ public class RatingController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(Rating), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
         Rating? rating = await _ratingRepository.FindById(id);
@@ -38,6 +41,8 @@ public class RatingController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(Rating), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] Rating rating)
     {
         Rating created = await _ratingRepository.Add(rating);
@@ -46,6 +51,9 @@ public class RatingController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(Rating), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] Rating rating)
     {
         if (!await _ratingRepository.Exists(id))
@@ -59,6 +67,8 @@ public class RatingController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(Rating), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         Rating? deleted = await _ratingRepository.Delete(id);

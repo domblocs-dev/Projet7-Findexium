@@ -1,7 +1,7 @@
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dot.Net.WebApi.Controllers;
 
@@ -20,6 +20,7 @@ public class RuleNameController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<RuleName>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
         List<RuleName> ruleNames = await _ruleNameRepository.FindAll();
@@ -27,6 +28,8 @@ public class RuleNameController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(RuleName), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
         RuleName? ruleName = await _ruleNameRepository.FindById(id);
@@ -38,6 +41,8 @@ public class RuleNameController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(RuleName), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] RuleName ruleName)
     {
         RuleName created = await _ruleNameRepository.Add(ruleName);
@@ -46,6 +51,9 @@ public class RuleNameController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(RuleName), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] RuleName ruleName)
     {
         if (!await _ruleNameRepository.Exists(id))
@@ -59,6 +67,8 @@ public class RuleNameController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(RuleName), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         RuleName? deleted = await _ruleNameRepository.Delete(id);

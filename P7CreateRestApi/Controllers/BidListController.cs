@@ -20,6 +20,7 @@ public class BidListController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(List<BidList>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
         List<BidList> bidLists = await _bidListRepository.FindAll();
@@ -27,6 +28,8 @@ public class BidListController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(BidList), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
         BidList? bidList = await _bidListRepository.FindById(id);
@@ -38,6 +41,8 @@ public class BidListController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(BidList), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] BidList bidList)
     {
         BidList created = await _bidListRepository.Add(bidList);
@@ -46,6 +51,9 @@ public class BidListController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(BidList), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] BidList bidList)
     {
         if (!await _bidListRepository.Exists(id))
@@ -59,6 +67,8 @@ public class BidListController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(BidList), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         BidList? deleted = await _bidListRepository.Delete(id);
