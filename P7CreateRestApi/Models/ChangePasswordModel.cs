@@ -8,6 +8,6 @@ public class ChangePasswordModel
     public string CurrentPassword { get; set; } = string.Empty;
 
     [Required]
-    [StringLength(100, MinimumLength = 6)]
+    [StringLength(100, MinimumLength = 8)]
     public string NewPassword { get; set; } = string.Empty;
 }
