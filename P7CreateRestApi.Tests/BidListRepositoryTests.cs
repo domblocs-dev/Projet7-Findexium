@@ -1,4 +1,4 @@
-﻿using Dot.Net.WebApi.Data;
+using Dot.Net.WebApi.Data;
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +21,7 @@ public class BidListRepositoryTests
         // Arrange
         using LocalDbContext context = CreateContext();
         BidListRepository repository = new BidListRepository(context);
-        BidList bid = new BidList { Account = "Compte A" };
+        BidList bid = new BidList { Account = "Compte A", BidType = "Type1" };
 
         // Act
         BidList created = await repository.Add(bid);
@@ -36,7 +36,7 @@ public class BidListRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         BidListRepository repository = new BidListRepository(context);
-        BidList bid = await repository.Add(new BidList { Account = "Compte B" });
+        BidList bid = await repository.Add(new BidList { Account = "Compte B", BidType = "Type1" });
 
         BidList? found = await repository.FindById(bid.BidListId);
 
@@ -60,8 +60,8 @@ public class BidListRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         BidListRepository repository = new BidListRepository(context);
-        await repository.Add(new BidList { Account = "A" });
-        await repository.Add(new BidList { Account = "B" });
+        await repository.Add(new BidList { Account = "A", BidType = "Type1" });
+        await repository.Add(new BidList { Account = "B", BidType = "Type1" });
 
         List<BidList> all = await repository.FindAll();
 
@@ -73,7 +73,7 @@ public class BidListRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         BidListRepository repository = new BidListRepository(context);
-        BidList bid = await repository.Add(new BidList { Account = "Ancien" });
+        BidList bid = await repository.Add(new BidList { Account = "Ancien", BidType = "Type1" });
         bid.Account = "Nouveau";
 
         await repository.Update(bid);
@@ -87,7 +87,7 @@ public class BidListRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         BidListRepository repository = new BidListRepository(context);
-        BidList bid = await repository.Add(new BidList { Account = "A supprimer" });
+        BidList bid = await repository.Add(new BidList { Account = "A supprimer", BidType = "Type1" });
 
         BidList? deleted = await repository.Delete(bid.BidListId);
 
@@ -111,7 +111,7 @@ public class BidListRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         BidListRepository repository = new BidListRepository(context);
-        BidList bid = await repository.Add(new BidList { Account = "X" });
+        BidList bid = await repository.Add(new BidList { Account = "X", BidType = "Type1" });
 
         Assert.True(await repository.Exists(bid.BidListId));
         Assert.False(await repository.Exists(999));

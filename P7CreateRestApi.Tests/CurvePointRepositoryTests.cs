@@ -1,4 +1,4 @@
-﻿using Dot.Net.WebApi.Data;
+using Dot.Net.WebApi.Data;
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +21,7 @@ public class CurvePointRepositoryTests
         using LocalDbContext context = CreateContext();
         CurvePointRepository repository = new CurvePointRepository(context);
 
-        CurvePoint created = await repository.Add(new CurvePoint { CurvePointValue = 10.0 });
+        CurvePoint created = await repository.Add(new CurvePoint { CurveId = 1, CurvePointValue = 10.0 });
 
         Assert.True(created.Id > 0);
         Assert.Equal(1, context.CurvePoints.Count());
@@ -32,7 +32,7 @@ public class CurvePointRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         CurvePointRepository repository = new CurvePointRepository(context);
-        CurvePoint c = await repository.Add(new CurvePoint { CurvePointValue = 10.0 });
+        CurvePoint c = await repository.Add(new CurvePoint { CurveId = 1, CurvePointValue = 10.0 });
 
         CurvePoint? found = await repository.FindById(c.Id);
 
@@ -54,8 +54,8 @@ public class CurvePointRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         CurvePointRepository repository = new CurvePointRepository(context);
-        await repository.Add(new CurvePoint { CurvePointValue = 1.0 });
-        await repository.Add(new CurvePoint { CurvePointValue = 2.0 });
+        await repository.Add(new CurvePoint { CurveId = 1, CurvePointValue = 1.0 });
+        await repository.Add(new CurvePoint { CurveId = 2, CurvePointValue = 2.0 });
 
         List<CurvePoint> all = await repository.FindAll();
 
@@ -67,7 +67,7 @@ public class CurvePointRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         CurvePointRepository repository = new CurvePointRepository(context);
-        CurvePoint c = await repository.Add(new CurvePoint { CurvePointValue = 10.0 });
+        CurvePoint c = await repository.Add(new CurvePoint { CurveId = 1, CurvePointValue = 10.0 });
         c.CurvePointValue = 20.0;
 
         await repository.Update(c);
@@ -81,7 +81,7 @@ public class CurvePointRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         CurvePointRepository repository = new CurvePointRepository(context);
-        CurvePoint c = await repository.Add(new CurvePoint { CurvePointValue = 10.0 });
+        CurvePoint c = await repository.Add(new CurvePoint { CurveId = 1, CurvePointValue = 10.0 });
 
         CurvePoint? deleted = await repository.Delete(c.Id);
 
@@ -103,7 +103,7 @@ public class CurvePointRepositoryTests
     {
         using LocalDbContext context = CreateContext();
         CurvePointRepository repository = new CurvePointRepository(context);
-        CurvePoint c = await repository.Add(new CurvePoint { CurvePointValue = 10.0 });
+        CurvePoint c = await repository.Add(new CurvePoint { CurveId = 1, CurvePointValue = 10.0 });
 
         Assert.True(await repository.Exists(c.Id));
         Assert.False(await repository.Exists(999));

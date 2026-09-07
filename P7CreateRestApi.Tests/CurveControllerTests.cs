@@ -51,7 +51,7 @@ public class CurveControllerTests
     public async Task GetById_RenvoieOk_SiExiste()
     {
         using LocalDbContext context = CreateContext();
-        CurvePoint created = await new CurvePointRepository(context).Add(new CurvePoint { CurvePointValue = 10.0 });
+        CurvePoint created = await new CurvePointRepository(context).Add(new CurvePoint { CurveId = 1, CurvePointValue = 10.0 });
         CurveController controller = CreateController(context);
 
         IActionResult result = await controller.GetById(created.Id);
@@ -66,7 +66,7 @@ public class CurveControllerTests
         using LocalDbContext context = CreateContext();
         CurveController controller = CreateController(context);
 
-        IActionResult result = await controller.Create(new CurvePoint { CurvePointValue = 5.0 });
+        IActionResult result = await controller.Create(new CurvePoint { CurveId = 1, CurvePointValue = 5.0 });
 
         CreatedAtActionResult created = Assert.IsType<CreatedAtActionResult>(result);
         CurvePoint returned = Assert.IsType<CurvePoint>(created.Value);
@@ -79,7 +79,7 @@ public class CurveControllerTests
         using LocalDbContext context = CreateContext();
         CurveController controller = CreateController(context);
 
-        IActionResult result = await controller.Update(999, new CurvePoint { CurvePointValue = 1.0 });
+        IActionResult result = await controller.Update(999, new CurvePoint { CurveId = 1, CurvePointValue = 1.0 });
 
         Assert.IsType<NotFoundResult>(result);
     }
@@ -88,7 +88,7 @@ public class CurveControllerTests
     public async Task Delete_RenvoieOk_SiExiste()
     {
         using LocalDbContext context = CreateContext();
-        CurvePoint created = await new CurvePointRepository(context).Add(new CurvePoint { CurvePointValue = 10.0 });
+        CurvePoint created = await new CurvePointRepository(context).Add(new CurvePoint { CurveId = 1, CurvePointValue = 10.0 });
         CurveController controller = CreateController(context);
 
         IActionResult result = await controller.Delete(created.Id);

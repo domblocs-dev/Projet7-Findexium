@@ -52,7 +52,7 @@ public class BidListControllerTests
     public async Task GetById_RenvoieOk_SiExiste()
     {
         using LocalDbContext context = CreateContext();
-        BidList created = await new BidListRepository(context).Add(new BidList { Account = "A" });
+        BidList created = await new BidListRepository(context).Add(new BidList { Account = "A", BidType = "Type1" });
         BidListController controller = CreateController(context);
 
         IActionResult result = await controller.GetById(created.BidListId);
@@ -68,7 +68,7 @@ public class BidListControllerTests
         using LocalDbContext context = CreateContext();
         BidListController controller = CreateController(context);
 
-        IActionResult result = await controller.Create(new BidList { Account = "Nouveau" });
+        IActionResult result = await controller.Create(new BidList { Account = "Nouveau", BidType = "Type1" });
 
         CreatedAtActionResult created = Assert.IsType<CreatedAtActionResult>(result);
         BidList returned = Assert.IsType<BidList>(created.Value);
@@ -81,7 +81,7 @@ public class BidListControllerTests
         using LocalDbContext context = CreateContext();
         BidListController controller = CreateController(context);
 
-        IActionResult result = await controller.Update(999, new BidList { Account = "X" });
+        IActionResult result = await controller.Update(999, new BidList { Account = "X", BidType = "Type1" });
 
         Assert.IsType<NotFoundResult>(result);
     }
@@ -90,7 +90,7 @@ public class BidListControllerTests
     public async Task Delete_RenvoieOk_SiExiste()
     {
         using LocalDbContext context = CreateContext();
-        BidList created = await new BidListRepository(context).Add(new BidList { Account = "A" });
+        BidList created = await new BidListRepository(context).Add(new BidList { Account = "A", BidType = "Type1" });
         BidListController controller = CreateController(context);
 
         IActionResult result = await controller.Delete(created.BidListId);
