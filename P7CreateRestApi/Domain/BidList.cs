@@ -1,9 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Dot.Net.WebApi.Domain;
 
 public class BidList
 {
     public int BidListId { get; set; }
+    [Required(ErrorMessage = "Le compte est obligatoire.")]
     public string? Account { get; set; }
+
+    [Required(ErrorMessage = "Le type de l'offre est obligatoire.")]
     public string? BidType { get; set; }
     public double? BidQuantity { get; set; }
     public double? AskQuantity { get; set; }
