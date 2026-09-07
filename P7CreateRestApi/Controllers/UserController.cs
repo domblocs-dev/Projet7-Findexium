@@ -89,6 +89,28 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(string id, [FromBody] UpdateUserModel model)
+    {
+        User? user = await _userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            return NotFound();
+        }
+
+        user.Email = model.Email;
+        user.Fullname = model.Fullname;
+
+        IdentityResult result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok(new { user.Id, user.UserName, user.Email, user.Fullname });
+    }
+
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
