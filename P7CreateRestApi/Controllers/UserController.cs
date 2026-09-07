@@ -13,11 +13,14 @@ public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ILogger<UserController> _logger;
 
-    public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+    public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
+        ILogger<UserController> logger)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _logger = logger;
     }
 
     [HttpPost("register")]
@@ -140,6 +143,30 @@ public class UserController : ControllerBase
         }
         return Ok(new { message = "Mot de passe modifie." });
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost("{id}/reset-password")]
+    public async Task<IActionResult> ResetPassword(string id, [FromBody] ResetPasswordModel model)
+    {
+        User? user = await _userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            return NotFound();
+        }
+
+        string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        IdentityResult result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        _logger.LogWarning("Mot de passe reinitialise pour {User} par l'admin {Admin}",
+            user.UserName, User.Identity?.Name);
+        return Ok(new { user.Id, user.UserName, message = "Mot de passe reinitialise." });
+    }
+
+
 
     [Authorize(Roles = "Admin")]
     [HttpPost("{id}/role/{role}")]
