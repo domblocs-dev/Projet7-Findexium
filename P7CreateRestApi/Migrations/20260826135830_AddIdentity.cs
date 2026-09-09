@@ -28,7 +28,7 @@ namespace P7CreateRestApi.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
 
-            migrationBuilder.DropColumn(
+            migrationBuilder.DropColumn(    // AlterColumn
                 name: "Id",
                 table: "AspNetUsers");
 

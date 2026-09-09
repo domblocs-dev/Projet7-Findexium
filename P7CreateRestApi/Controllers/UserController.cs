@@ -122,6 +122,14 @@ public class UserController : ControllerBase
         {
             return NotFound();
         }
+        if (await _userManager.IsInRoleAsync(user, "Admin"))
+        {
+            IList<User> admins = await _userManager.GetUsersInRoleAsync("Admin");
+            if (admins.Count <= 1)
+            {
+                return BadRequest("Impossible de supprimer le dernier administrateur.");
+            }
+        }
         await _userManager.DeleteAsync(user);
         return NoContent();
     }
