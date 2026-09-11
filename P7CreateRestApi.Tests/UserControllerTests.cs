@@ -42,7 +42,7 @@ public class UserControllerTests
         IActionResult result = await controller.Delete("1");
 
         // Assert : refus (400) ET la suppression ne doit PAS avoir eu lieu
-        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.IsType<BadRequestObjectResult>(result);      // 400
         userManager.Verify(m => m.DeleteAsync(It.IsAny<User>()), Times.Never);
     }
 }

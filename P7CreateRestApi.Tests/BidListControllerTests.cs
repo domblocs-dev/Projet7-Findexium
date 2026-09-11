@@ -45,7 +45,7 @@ public class BidListControllerTests
 
         IActionResult result = await controller.GetById(999);
 
-        Assert.IsType<NotFoundResult>(result);
+        Assert.IsType<NotFoundResult>(result);  // 404
     }
 
     [Fact]
@@ -57,8 +57,8 @@ public class BidListControllerTests
 
         IActionResult result = await controller.GetById(created.BidListId);
 
-        OkObjectResult ok = Assert.IsType<OkObjectResult>(result);
-        BidList returned = Assert.IsType<BidList>(ok.Value);
+        OkObjectResult ok = Assert.IsType<OkObjectResult>(result);      // 200
+        BidList returned = Assert.IsType<BidList>(ok.Value);        
         Assert.Equal("A", returned.Account);
     }
 
@@ -70,8 +70,8 @@ public class BidListControllerTests
 
         IActionResult result = await controller.Create(new BidList { Account = "Nouveau", BidType = "Type1" });
 
-        CreatedAtActionResult created = Assert.IsType<CreatedAtActionResult>(result);
-        BidList returned = Assert.IsType<BidList>(created.Value);
+        CreatedAtActionResult created = Assert.IsType<CreatedAtActionResult>(result);       // 201
+        BidList returned = Assert.IsType<BidList>(created.Value);       
         Assert.True(returned.BidListId > 0);
     }
 
@@ -83,7 +83,7 @@ public class BidListControllerTests
 
         IActionResult result = await controller.Update(999, new BidList { Account = "X", BidType = "Type1" });
 
-        Assert.IsType<NotFoundResult>(result);
+        Assert.IsType<NotFoundResult>(result);      // 404
     }
 
     [Fact]
@@ -95,7 +95,7 @@ public class BidListControllerTests
 
         IActionResult result = await controller.Delete(created.BidListId);
 
-        Assert.IsType<OkObjectResult>(result);
+        Assert.IsType<OkObjectResult>(result);      // 200
     }
 
     [Fact]
@@ -106,6 +106,6 @@ public class BidListControllerTests
 
         IActionResult result = await controller.Delete(999);
 
-        Assert.IsType<NotFoundResult>(result);
+        Assert.IsType<NotFoundResult>(result);      // 404
     }
 }
