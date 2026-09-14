@@ -40,11 +40,14 @@ public class BidListControllerTests
     [Fact]
     public async Task GetById_RenvoieNotFound_SiInexistant()
     {
+        // Arrange
         using LocalDbContext context = CreateContext();
         BidListController controller = CreateController(context);
 
+        // Act
         IActionResult result = await controller.GetById(999);
 
+        // Assert
         Assert.IsType<NotFoundResult>(result);  // 404
     }
 

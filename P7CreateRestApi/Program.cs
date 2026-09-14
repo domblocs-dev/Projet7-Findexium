@@ -98,6 +98,8 @@ builder.Services.AddScoped<TradeRepository>();
 
 var app = builder.Build();
 
+// Middleware
+
 using (IServiceScope scope = app.Services.CreateScope())
 {
     await SeedData.InitializeAsync(scope.ServiceProvider);

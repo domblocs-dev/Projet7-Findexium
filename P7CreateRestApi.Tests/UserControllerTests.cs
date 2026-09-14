@@ -16,7 +16,7 @@ public class UserControllerTests
     {
         Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
         return new Mock<UserManager<User>>(
-            store.Object, null, null, null, null, null, null, null, null);
+            store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
     }
 
     private static UserController CreateController(UserManager<User> userManager)
